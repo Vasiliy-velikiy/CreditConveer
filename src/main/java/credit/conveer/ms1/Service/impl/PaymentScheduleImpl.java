@@ -4,6 +4,8 @@ import credit.conveer.ms1.Dto.PaymentScheduleElement;
 import credit.conveer.ms1.Dto.ScoringDataDTO;
 import credit.conveer.ms1.Service.PaymentSchedule;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,6 +18,12 @@ import java.util.List;
 @Service
 @Slf4j
 public class PaymentScheduleImpl implements PaymentSchedule {
+    @Value("${conveyor.percent}")
+    private Integer percent;
+
+    @Value("${conveyor.monthly}")
+    private Integer monthly;
+
     private PaymentCalculationImpl paymentCalculation;
 
     public PaymentScheduleImpl(PaymentCalculationImpl paymentCalculation) {
@@ -50,7 +58,7 @@ public class PaymentScheduleImpl implements PaymentSchedule {
                         .setRemainingDebt( paymentCalculation.getTotalAmount(scoringDataDTO)
                                 .divide(paymentCalculation.getMonthlyPayment(scoringDataDTO)
                                         .multiply(BigDecimal.valueOf(i)), 4, RoundingMode.HALF_EVEN))
-                        .setInterestPayment(BigDecimal.valueOf((paymentCalculation.getRate(scoringDataDTO).doubleValue() * 100 / 12 + 1) *
+                        .setInterestPayment(BigDecimal.valueOf((paymentCalculation.getRate(scoringDataDTO).doubleValue() * percent / monthly + 1) *
                                 paymentCalculation.getTotalAmount(scoringDataDTO)
                                         .divide(paymentCalculation.getMonthlyPayment(scoringDataDTO)
                                                 .multiply(BigDecimal.valueOf(i)), 4, RoundingMode.HALF_EVEN).doubleValue())));

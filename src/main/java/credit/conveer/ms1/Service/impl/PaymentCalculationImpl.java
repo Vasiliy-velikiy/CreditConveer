@@ -5,6 +5,7 @@ import credit.conveer.ms1.Dto.ScoringDataDTO;
 import credit.conveer.ms1.Service.PaymentCalculation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +20,18 @@ import java.time.temporal.ChronoUnit;
 @Slf4j
 public class PaymentCalculationImpl implements PaymentCalculation {
 
+    @Value("${conveyor.percent}")
+    private Integer percent;
+
+    @Value("${conveyor.monthly}")
+    private Integer monthly;
+
+    @Value("${conveyor.dayOfYear}")
+    private Integer dayOfYear;
+
+    @Value("${conveyor.dayOfMonth}")
+    private Integer dayOfMonth;
+
     /*
 расчет ежемесечного платежа
 https://www.raiffeisen.ru/wiki/kak-rasschitat-annuitetnyj-platezh/
@@ -26,7 +39,7 @@ https://www.raiffeisen.ru/wiki/kak-rasschitat-annuitetnyj-platezh/
     @Override
     public BigDecimal getMonthlyPayment(ScoringDataDTO scoringDataDTO) {
         // расчет мессячной проентной ставки
-        BigDecimal monthlyRate = BigDecimal.valueOf((getRate(scoringDataDTO).doubleValue() * 100) / (100 * 12)).setScale(4, RoundingMode.HALF_EVEN);
+        BigDecimal monthlyRate = BigDecimal.valueOf((getRate(scoringDataDTO).doubleValue() * percent) / (percent * monthly)).setScale(4, RoundingMode.HALF_EVEN);
         //
         if (scoringDataDTO.getIsInsuranceEnabled()) {
             return BigDecimal.valueOf((scoringDataDTO.getAmount().doubleValue() + getInsurance(scoringDataDTO).doubleValue())
@@ -40,7 +53,7 @@ https://www.raiffeisen.ru/wiki/kak-rasschitat-annuitetnyj-platezh/
     //    Страховка считается от суммы кредита и равна 10 процентам от суммы займа
     @Override
     public BigDecimal getInsurance(ScoringDataDTO scoringDataDTO) {
-        return scoringDataDTO.getAmount().divide(BigDecimal.valueOf(100)).multiply(BigDecimal.valueOf(10));
+        return scoringDataDTO.getAmount().divide(BigDecimal.valueOf(percent)).multiply(BigDecimal.valueOf(10));
     }
 
     //Полная стоимость кредита
@@ -56,12 +69,12 @@ https://www.raiffeisen.ru/wiki/kak-rasschitat-annuitetnyj-platezh/
             return (getTotalAmount(scoringDataDTO)
                     .divide(scoringDataDTO.getAmount().add(getInsurance(scoringDataDTO)), 6, RoundingMode.HALF_EVEN)
                     .subtract(BigDecimal.valueOf(1)))
-                    .multiply(BigDecimal.valueOf(365 / (scoringDataDTO.getTerm() * 30) * 100)).setScale(4, RoundingMode.HALF_EVEN);
+                    .multiply(BigDecimal.valueOf(dayOfYear / (scoringDataDTO.getTerm() * dayOfMonth) * percent)).setScale(4, RoundingMode.HALF_EVEN);
         }
         return (getTotalAmount(scoringDataDTO)
                 .divide(scoringDataDTO.getAmount())
                 .subtract(BigDecimal.valueOf(1)))
-                .multiply(BigDecimal.valueOf(365 / (scoringDataDTO.getTerm() * 30) * 100)).setScale(4, RoundingMode.HALF_EVEN);
+                .multiply(BigDecimal.valueOf(dayOfYear / (scoringDataDTO.getTerm() * dayOfMonth) * percent)).setScale(4, RoundingMode.HALF_EVEN);
     }
 
     @Override

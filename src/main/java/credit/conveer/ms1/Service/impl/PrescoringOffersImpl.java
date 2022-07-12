@@ -5,6 +5,7 @@ import credit.conveer.ms1.Dto.LoanOfferDTO;
 import credit.conveer.ms1.Service.PrescoringOffers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,6 +22,12 @@ public class PrescoringOffersImpl implements PrescoringOffers {
 
     private Long id= Long.valueOf(0);
 
+    @Value("${conveyor.percent}")
+    private Integer percent;
+
+    @Value("${conveyor.monthly}")
+    private Integer monthly;
+
     /*
     Логика прескоринга. Базовая ставка 10. Страховка 1000.
     Базовая ставка уменьшается если сумма кредита больше 1кк на 1п., больше 10кк на 2п.,
@@ -29,7 +36,7 @@ public class PrescoringOffersImpl implements PrescoringOffers {
      */
     public BigDecimal getMonthlyPayment(BigDecimal amount, BigDecimal rate, Integer term, boolean insurence) {
         log.debug("this is monthly payment");
-        BigDecimal monthlyRate = BigDecimal.valueOf((rate.doubleValue() * 100) / (100 * 12)).setScale(4, RoundingMode.HALF_EVEN);
+        BigDecimal monthlyRate = BigDecimal.valueOf((rate.doubleValue() * percent) / (percent * monthly)).setScale(4, RoundingMode.HALF_EVEN);
         if (insurence) {
             BigDecimal bc= BigDecimal.valueOf((amount.doubleValue() + getInsurance(amount).doubleValue())
                     * (monthlyRate.doubleValue() / (1 - Math.pow((1 + monthlyRate.doubleValue()), -term)))).setScale(4, RoundingMode.HALF_EVEN);
@@ -44,7 +51,7 @@ public class PrescoringOffersImpl implements PrescoringOffers {
 
     public BigDecimal getInsurance(BigDecimal amount) {
         log.debug("this is Insurance");
-      BigDecimal ins= amount.divide(BigDecimal.valueOf(100),4, RoundingMode.HALF_EVEN).multiply(BigDecimal.valueOf(10));
+      BigDecimal ins= amount.divide(BigDecimal.valueOf(percent),4, RoundingMode.HALF_EVEN).multiply(BigDecimal.valueOf(10));
         log.debug(String.valueOf(ins));
         return ins;
     }

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -69,9 +70,10 @@ class CreditCalculationImplTest {
     @Test
     void getCalculatedOffersTwo() {
         CreditDTO result = creditCalculation.getCalculatedOffers(scoringDataDTO);
+      Date date  =new Date();
         PaymentScheduleElement expected=new PaymentScheduleElement()
                 .setNumber(2)
-                .setDate(LocalDate.parse("2022-09-10"))
+                .setDate(LocalDate.now().plusMonths(2))
                 .setTotalPayment(new BigDecimal(113026.0740).setScale(4, RoundingMode.HALF_EVEN))
                 .setInterestPayment(new BigDecimal(8.5))
                 .setDebtPayment(new BigDecimal(9418.8395).setScale(4, RoundingMode.HALF_EVEN))
@@ -85,7 +87,7 @@ class CreditCalculationImplTest {
         CreditDTO result = creditCalculation.getCalculatedOffers(scoringDataDTO);
         PaymentScheduleElement expected=new PaymentScheduleElement()
                 .setNumber(4)
-                .setDate(LocalDate.parse("2022-11-10"))
+                .setDate(LocalDate.now().plusMonths(4))
                 .setTotalPayment(new BigDecimal(113026.0740).setScale(4, RoundingMode.HALF_EVEN))
                 .setInterestPayment(new BigDecimal(4.25).setScale(2, RoundingMode.HALF_EVEN))
                 .setDebtPayment(new BigDecimal(9418.8395).setScale(4, RoundingMode.HALF_EVEN))
