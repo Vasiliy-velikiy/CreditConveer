@@ -1,5 +1,6 @@
 package credit.conveer.msDeal.Service.Impl;
 
+import credit.conveer.App;
 import credit.conveer.ms1.Dto.LoanOfferDTO;
 import credit.conveer.msDeal.Model.Application;
 import credit.conveer.msDeal.Model.ApplicationStatusHistory;
@@ -32,7 +33,7 @@ public class DealServiceImpl implements DealService {
     private final ApplicationStatusHistoryRepository applicationStatusHistoryRepository;
     private final LoanMapper loanMapper;
 
-    private Long applicationStatusHistoryId = Long.valueOf(0);
+    private static Long applicationStatusHistoryId = Long.valueOf(0);
     private Long loanId = Long.valueOf(0);
 
     public DealServiceImpl(ApplicationRepository applicationRepository, ApplicationStatusHistoryRepository applicationStatusHistoryRepository, LoanMapper loanMapper) {
@@ -44,15 +45,16 @@ public class DealServiceImpl implements DealService {
     public void selectOneOfOffers(LoanOfferDTO dto) {
         log.info("LoanOfferDTO is"+dto.toString());
         //хибер не хочет искать значения по findById пока не подтяну все из базы
-        List<Application> applicationList = applicationRepository.findAll();
-        Optional<Application> optional = applicationRepository.findById(dto.getApplicationId());
-        Application application = optional.get();
+        Application application =fetchApplFromRepo(dto);
+        ApplicationStatusHistory applicationStatusHistory =  createApplStatusHistory(application);
 
+        applicationRepository.save(application);
+        applicationStatusHistoryRepository.save(applicationStatusHistory);
+        applicationRepository.save(application);
 
-        application.setStatus(Status.APPROVED);
-        application.setAppliedOffer(loanMapper.toEntity(dto).setId(++loanId));
+    }
 
-        log.info(" application is"+application);
+    public ApplicationStatusHistory createApplStatusHistory(Application application){
         ApplicationStatusHistory applicationStatusHistory = new ApplicationStatusHistory().
                 setId(++applicationStatusHistoryId)
                 .setTime(LocalDateTime.now())
@@ -61,10 +63,20 @@ public class DealServiceImpl implements DealService {
                 .setApplication(application);
         log.info("applicationStatusHistory is"+applicationStatusHistory.toString());
 
-        applicationRepository.save(application);
-        applicationStatusHistoryRepository.save(applicationStatusHistory);
-
-        applicationRepository.save(application);
-
+        return applicationStatusHistory;
     }
+
+    public  Application fetchApplFromRepo(LoanOfferDTO dto){
+        List<Application> applicationList = applicationRepository.findAll();
+        Optional<Application> optional = applicationRepository.findById(dto.getApplicationId());
+        Application application = optional.get();
+
+        application.setStatus(Status.APPROVED);
+        application.setAppliedOffer(loanMapper.toEntity(dto).setId(++loanId));
+
+        log.info(" application is"+application);
+        return application;
+    }
+
+
 }

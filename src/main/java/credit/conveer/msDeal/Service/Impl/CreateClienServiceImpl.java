@@ -1,5 +1,6 @@
 package credit.conveer.msDeal.Service.Impl;
 
+import credit.conveer.App;
 import credit.conveer.ms1.Dto.LoanApplicationRequestDTO;
 import credit.conveer.ms1.Dto.LoanOfferDTO;
 import credit.conveer.msDeal.Client.ClientForConveyorOffers;
@@ -41,6 +42,34 @@ public class CreateClienServiceImpl implements CreateClienService {
 
     public List<LoanOfferDTO> createClientAndApplication(LoanApplicationRequestDTO dto) {
         log.info("LoanApplicationRequestDTO is "+dto.toString());
+
+        Client client =createClient(dto);
+        Application application = createApplication(client);
+        Credit credit = createCredot(application,dto);
+
+        application.setCredit(credit);
+        client.getApplications().add(application);
+
+        clientRepository.save(client);
+        applicationRepository.save(application);
+        creditRepository.save(credit);
+
+        Client testClient=clientRepository.findById(Long.valueOf(1)).get();
+        //постзапрос через фейн на  /conveyor/offers
+        List<LoanOfferDTO> offers = clientForConveyorOffers.touchOffers(dto);
+        offers.stream().forEach(e -> e.setApplicationId(application.getId())); //каждому элементу из списка List<LoanOfferDTO> присваивается id созданной заявки
+        log.info("offers is "+offers.toString());
+        return offers;
+
+    }
+
+    public Application createApplication(Client client){
+        Application application = new Application().setClient(client).setId(client.getId()).setCreation_date(LocalDate.now());
+        return application;
+    }
+
+    public Client createClient(LoanApplicationRequestDTO dto)
+    {
         Client client = new Client().setId(id++).setFirst_name(dto.getFirstName())
                 .setLast_name(dto.getLastName())
                 .setMiddle_name(dto.getMiddleName())
@@ -48,29 +77,14 @@ public class CreateClienServiceImpl implements CreateClienService {
                 .setPassport(dto.getPassportNumber())
                 .setSeries(dto.getPassportSeries())
                 .setEmail(dto.getEmail());
+        return  client;
+    }
 
-        Application application = new Application().setClient(client).setId(client.getId()).setCreation_date(LocalDate.now());
-
-
-
+    public Credit createCredot(Application application,LoanApplicationRequestDTO dto){
         Credit credit = new Credit().setId(application.getId()).setAmount(dto.getAmount())
                 .setTerm(dto.getTerm()).setApplication(application)
                 .setIs_insurance_enabled(false)
                 .setIs_salary_client(false);
-        application.setCredit(credit);
-
-        client.getApplications().add(application);
-
-        clientRepository.save(client);
-        applicationRepository.save(application);
-        creditRepository.save(credit);
-
-        Client client1=clientRepository.findById(Long.valueOf(1)).get();
-        //постзапрос через фейн на  /conveyor/offers
-        List<LoanOfferDTO> offers = clientForConveyorOffers.touchOffers(dto);
-        offers.stream().forEach(e -> e.setApplicationId(application.getId())); //каждому элементу из списка List<LoanOfferDTO> присваивается id созданной заявки
-        log.info("offers is "+offers.toString());
-        return offers;
-
+        return credit;
     }
 }

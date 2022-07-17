@@ -69,7 +69,7 @@ public class Client {
 
     @OneToMany(mappedBy = "client",
             orphanRemoval = true,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {PERSIST, MERGE, DETACH, REFRESH})
     List<Application> applications=new ArrayList<>();
 

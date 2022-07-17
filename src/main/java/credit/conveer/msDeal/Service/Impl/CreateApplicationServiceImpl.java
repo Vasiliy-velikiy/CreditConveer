@@ -21,23 +21,34 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-@Transactional
+//@Transactional
 public class CreateApplicationServiceImpl implements CreateApplicationService {
 
-    private final ApplicationRepository applicationRepository;
-    private final ClientForCalculationScoring clientForCalculationScoring;
-    private final EmploymentRepository employmentRepository;
-    private final ClientRepository clientRepository;
+    @Autowired
+    private  ApplicationRepository applicationRepository;
+    @Autowired
+    private ClientForCalculationScoring clientForCalculationScoring;
+    @Autowired
+    private  EmploymentRepository employmentRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+
+//    private final   ApplicationRepository applicationRepository;
+//    private final ClientForCalculationScoring clientForCalculationScoring;
+//    private final EmploymentRepository employmentRepository;
+//    private final ClientRepository clientRepository;
+//
+//    public CreateApplicationServiceImpl(ApplicationRepository applicationRepository, ClientForCalculationScoring clientForCalculationScoring, EmploymentRepository employmentRepository, ClientRepository clientRepository) {
+//        this.applicationRepository = applicationRepository;
+//        this.clientForCalculationScoring = clientForCalculationScoring;
+//        this.employmentRepository = employmentRepository;
+//        this.clientRepository = clientRepository;
+//    }
 
     Long employmentId = Long.valueOf(0);
 
-    public CreateApplicationServiceImpl(ApplicationRepository applicationRepository, ClientForCalculationScoring clientForCalculationScoring, EmploymentRepository employmentRepository, ClientRepository clientRepository) {
-        this.applicationRepository = applicationRepository;
-        this.clientForCalculationScoring = clientForCalculationScoring;
-        this.employmentRepository = employmentRepository;
-        this.clientRepository = clientRepository;
-    }
 
+    @Transactional
     public void completionOfRegistrationAndFullCreditCalculation(FinishRegistrationRequestDTO dto, Long applicationId) {
         log.info("send dto and id to feignClient " + "id =" + applicationId + " ,dto is= " + dto.toString());
         List<Application> applicationList = applicationRepository.findAll();
