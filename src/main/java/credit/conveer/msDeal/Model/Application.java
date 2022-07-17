@@ -34,11 +34,11 @@ public class Application {
     private Long id;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @ManyToOne()
     @JoinColumn(name = "client_id")
-    private Client client;//Клиент
+    private Client clientApp;//Клиент
 
-    @OneToOne(optional = false, mappedBy="application", fetch = FetchType.LAZY)
+    @OneToOne( mappedBy="application", fetch = FetchType.LAZY)
     private Credit credit; //Кредит
 
 
@@ -50,7 +50,7 @@ public class Application {
     private LocalDate creation_date; //Дата создания
 
 
-    @OneToOne(optional = false, mappedBy="applicationWithLoan")
+    @OneToOne( mappedBy="applicationWithLoan")
     private LoanOffer appliedOffer;//Принятое предложение кредита
 
 
@@ -63,7 +63,7 @@ public class Application {
     @OneToMany(mappedBy = "application",
             orphanRemoval = true,
             fetch = FetchType.LAZY,
-            cascade = {PERSIST, MERGE, DETACH, REFRESH})
+            cascade = {PERSIST})
     private List<ApplicationStatusHistory> status_history;//(История изменения статусов)
 
     }

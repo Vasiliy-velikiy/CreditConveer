@@ -43,10 +43,9 @@ public class DealServiceImpl implements DealService {
     }
 
     public void selectOneOfOffers(LoanOfferDTO dto) {
-        log.info("LoanOfferDTO is"+dto.toString());
-        //хибер не хочет искать значения по findById пока не подтяну все из базы
-        Application application =fetchApplFromRepo(dto);
-        ApplicationStatusHistory applicationStatusHistory =  createApplStatusHistory(application);
+        log.info("LoanOfferDTO is" + dto.toString());
+        Application application = fetchApplFromRepo(dto);
+        ApplicationStatusHistory applicationStatusHistory = createApplStatusHistory(application);
 
         applicationRepository.save(application);
         applicationStatusHistoryRepository.save(applicationStatusHistory);
@@ -54,19 +53,19 @@ public class DealServiceImpl implements DealService {
 
     }
 
-    public ApplicationStatusHistory createApplStatusHistory(Application application){
+    public ApplicationStatusHistory createApplStatusHistory(Application application) {
         ApplicationStatusHistory applicationStatusHistory = new ApplicationStatusHistory().
                 setId(++applicationStatusHistoryId)
                 .setTime(LocalDateTime.now())
                 .setStatus(application.getStatus())
                 .setChangeType(ChangeType.CHANGED)
                 .setApplication(application);
-        log.info("applicationStatusHistory is"+applicationStatusHistory.toString());
+        log.info("applicationStatusHistory is" + applicationStatusHistory.toString());
 
         return applicationStatusHistory;
     }
 
-    public  Application fetchApplFromRepo(LoanOfferDTO dto){
+    public Application fetchApplFromRepo(LoanOfferDTO dto) {
         List<Application> applicationList = applicationRepository.findAll();
         Optional<Application> optional = applicationRepository.findById(dto.getApplicationId());
         Application application = optional.get();
@@ -74,7 +73,7 @@ public class DealServiceImpl implements DealService {
         application.setStatus(Status.APPROVED);
         application.setAppliedOffer(loanMapper.toEntity(dto).setId(++loanId));
 
-        log.info(" application is"+application);
+        log.info(" application is" + application);
         return application;
     }
 

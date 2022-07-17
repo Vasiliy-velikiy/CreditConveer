@@ -25,16 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 class CreditCalculationImplTest {
 
-
-
-    private enum employmentStatus {
-        SELF_EMPLOYED;
-    }
-
-    private enum position {
-        TOP_MANAGER;
-    }
-
+    @Autowired
+    private CreditCalculation creditCalculation;
 
     private EmploymentDTO employmentDTO = new EmploymentDTO()
             .setEmploymentStatus(EmploymentStatus.SELF_EMPLOYED)
@@ -61,9 +53,6 @@ class CreditCalculationImplTest {
             .setAccount("account")
             .setIsInsuranceEnabled(true)
             .setIsSalaryClient(true);
-
-        @Autowired
-        private CreditCalculation creditCalculation;
 
 
     @Test

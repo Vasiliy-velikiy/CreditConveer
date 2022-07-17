@@ -11,7 +11,9 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.STRING;
@@ -61,16 +63,20 @@ public class Client {
     @Column(name = "issue_branch")
     private  String issue_branch; //отделение
 
-//    @OneToOne(optional = false, mappedBy="client")
-//    private   Employment employment;//Работа
+    @OneToOne( mappedBy="clientEmpl")
+    private   Employment employment;//Работа
 
     @Column(name = "account")
     private   String account; //Счет клиента
 
-    @OneToMany(mappedBy = "client",
+    @OneToMany(mappedBy = "clientApp",
             orphanRemoval = true,
             fetch = FetchType.LAZY,
-            cascade = {PERSIST, MERGE, DETACH, REFRESH})
-    List<Application> applications=new ArrayList<>();
+            cascade = {PERSIST})
+    List<Application> applications;
 
+    public void addApplication( Application application){
+        application.setClientApp(this);
+        this.applications.add(application);
+    }
 }

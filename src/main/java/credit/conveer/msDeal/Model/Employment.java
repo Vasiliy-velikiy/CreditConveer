@@ -16,7 +16,6 @@ import static javax.persistence.EnumType.STRING;
 /**
  * Работа
  */
-
 @Entity
 @Table(name = "employment")
 @Getter
@@ -39,7 +38,7 @@ public class Employment {
     private  Integer work_experience_total; //(общий опыт работы)
     private  Integer work_experience_current; //опыт работы на текущем месте
 
-//    @OneToOne(optional = false)
-//    @JoinColumn(name="client_id")
-//    private Client client;
+    @OneToOne()
+    @JoinColumn(name="client_id")
+    private Client clientEmpl;
 }

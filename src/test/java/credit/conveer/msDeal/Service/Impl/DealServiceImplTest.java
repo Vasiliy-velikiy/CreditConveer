@@ -28,37 +28,37 @@ class DealServiceImplTest {
     @Autowired
     private DealService dealService;
 
-    private LoanOfferDTO dto=LoanOfferDTO.builder().applicationId(Long.valueOf(1)).requestedAmount(BigDecimal.valueOf(100000)).totalAmount(BigDecimal.valueOf(115476.7420).setScale(4, RoundingMode.HALF_EVEN)).term(12)
+    private LoanOfferDTO dto = LoanOfferDTO.builder().applicationId(Long.valueOf(1)).requestedAmount(BigDecimal.valueOf(100000)).totalAmount(BigDecimal.valueOf(115476.7420).setScale(4, RoundingMode.HALF_EVEN)).term(12)
             .monthlyPayment(BigDecimal.valueOf(8789.7285).setScale(4, RoundingMode.HALF_EVEN)).rate(BigDecimal.valueOf(0.10).setScale(2, RoundingMode.HALF_EVEN)).isInsuranceEnabled(false).isSalaryClient(false).build();
 
-    Credit mockCredit= Mockito.mock(Credit.class);
-    Client mockClient=Mockito.mock(Client.class);
-    LoanOffer mockLoanOffer=Mockito.mock(LoanOffer.class);
+    Credit mockCredit = Mockito.mock(Credit.class);
+    Client mockClient = Mockito.mock(Client.class);
+    LoanOffer mockLoanOffer = Mockito.mock(LoanOffer.class);
 
 
-    private Application application=new Application().setId(Long.valueOf(1)).setClient(mockClient).setCredit(mockCredit).setStatus(Status.APPROVED)
+    private Application application = new Application().setId(Long.valueOf(1)).setClientApp(mockClient).setCredit(mockCredit).setStatus(Status.APPROVED)
             .setCreation_date(LocalDate.of(2022, 07, 17))
             .setAppliedOffer(mockLoanOffer).setSign_date(null).setSes_code(null).setStatus_history(null);
 
     @Test
     void createApplStatusHistory() {
-      ApplicationStatusHistory expected=new ApplicationStatusHistory().setId(Long.valueOf(1))
-              .setStatus(Status.APPROVED).setTime(LocalDateTime.now()).setChangeType(ChangeType.CHANGED)
-              .setApplication(application);
+        ApplicationStatusHistory expected = new ApplicationStatusHistory().setId(Long.valueOf(1))
+                .setStatus(Status.APPROVED).setTime(LocalDateTime.now()).setChangeType(ChangeType.CHANGED)
+                .setApplication(application);
 
-        ApplicationStatusHistory actual= dealService.createApplStatusHistory(application);
-        assertEquals(expected.getId(),actual.getId());
-        assertEquals(expected.getChangeType(),actual.getChangeType());
-        assertEquals(expected.getStatus(),actual.getStatus());
+        ApplicationStatusHistory actual = dealService.createApplStatusHistory(application);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getChangeType(), actual.getChangeType());
+        assertEquals(expected.getStatus(), actual.getStatus());
     }
 
     @Test
     void fetchApplFromRepo() {
-        Application actual=dealService.fetchApplFromRepo(dto);
-        Application expected=application;
+        Application actual = dealService.fetchApplFromRepo(dto);
+        Application expected = application;
         System.out.println(actual.toString());
-        assertEquals(expected.getStatus(),actual.getStatus());
-        assertEquals(expected.getId(),actual.getId());
-        assertEquals(expected.getCreation_date(),actual.getCreation_date());
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getCreation_date(), actual.getCreation_date());
     }
 }

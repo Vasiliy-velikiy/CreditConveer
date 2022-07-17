@@ -1,9 +1,7 @@
 package credit.conveer.msDeal.Model;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import credit.conveer.ms1.Dto.PaymentScheduleElement;
 import credit.conveer.msDeal.Model.Enum.CreditStatus;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -28,25 +26,25 @@ public class Credit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private  BigDecimal amount;   // Сумма
-    private   Integer term;      // Срок
-    private  BigDecimal monthly_payment; // (Ежемесячный платеж)
-    private  BigDecimal rate;     // (Процентная ставка)
-    private   BigDecimal psk;     // (Полная стоимость кредита)
+    private BigDecimal amount;   // Сумма
+    private Integer term;      // Срок
+    private BigDecimal monthly_payment; // (Ежемесячный платеж)
+    private BigDecimal rate;     // (Процентная ставка)
+    private BigDecimal psk;     // (Полная стоимость кредита)
 
-  //  private  PaymentScheduleElement payment_schedule; // (График платежей
+    //private PaymentScheduleElement payment_schedule; // (График платежей
 
     // Доп. услуги
-    private   Boolean is_insurance_enabled;  //(Страховка включена?)
-    private  Boolean is_salary_client;     //(Зарплатный клиент?)
+    private Boolean is_insurance_enabled;  //(Страховка включена?)
+    private Boolean is_salary_client;     //(Зарплатный клиент?)
 
-    @OneToOne(optional = false)
-    @JoinColumn(name="application_id")
+    @OneToOne()
+    @JoinColumn(name = "application_id")
     @NotFound(action = NotFoundAction.IGNORE)
-   private Application application;
+    private Application application;
 
     @Column(name = "status")
     @Enumerated(STRING)
-    private  CreditStatus credit_status;          // Статус кредита CALCULATED ISSUED
+    private CreditStatus credit_status;          // Статус кредита CALCULATED ISSUED
 
 }
