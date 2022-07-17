@@ -5,6 +5,10 @@ import credit.conveer.ms1.Dto.EmploymentDTO;
 import credit.conveer.ms1.Dto.PaymentScheduleElement;
 import credit.conveer.ms1.Dto.ScoringDataDTO;
 import credit.conveer.ms1.Service.CreditCalculation;
+import credit.conveer.msDeal.Model.Enum.EmploymentStatus;
+import credit.conveer.msDeal.Model.Enum.Gender;
+import credit.conveer.msDeal.Model.Enum.MaritalStatus;
+import credit.conveer.msDeal.Model.Enum.Position;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 class CreditCalculationImplTest {
 
-    private enum maritalStatus {
-        MARRIED;
-    }
+
 
     private enum employmentStatus {
         SELF_EMPLOYED;
@@ -33,15 +35,12 @@ class CreditCalculationImplTest {
         TOP_MANAGER;
     }
 
-    private enum gender {
-        MAN;
-    }
 
     private EmploymentDTO employmentDTO = new EmploymentDTO()
-            .setEmploymentStatus(CreditCalculationImplTest.employmentStatus.SELF_EMPLOYED)
+            .setEmploymentStatus(EmploymentStatus.SELF_EMPLOYED)
             .setEmployerINN("324245")
             .setSalary(new BigDecimal("400000"))
-            .setPosition(CreditCalculationImplTest.position.TOP_MANAGER)
+            .setPosition(Position.TOP_MANAGER)
             .setWorkExperienceTotal(19)
             .setWorkExperienceCurrent(14);
 
@@ -52,11 +51,11 @@ class CreditCalculationImplTest {
             .setFirstName("Ivan")
             .setLastName("Ivanov")
             .setMiddleName("Ivanovich")
-            .setGender(CreditCalculationImplTest.gender.MAN)
+            .setGender(Gender.MALE)
             .setBirthdate(LocalDate.of(1993, 02, 03))
             .setPassportIssueDate(LocalDate.of(2005, 3, 13))
             .setPassportIssueBranch("УФМС России по Воронежской обл. центрального р-а")
-            .setMaritalStatus(CreditCalculationImplTest.maritalStatus.MARRIED)
+            .setMaritalStatus(MaritalStatus.MARRIED)
             .setDependentAmount(3)
             .setEmployment(employmentDTO)
             .setAccount("account")
@@ -70,7 +69,6 @@ class CreditCalculationImplTest {
     @Test
     void getCalculatedOffersTwo() {
         CreditDTO result = creditCalculation.getCalculatedOffers(scoringDataDTO);
-      Date date  =new Date();
         PaymentScheduleElement expected=new PaymentScheduleElement()
                 .setNumber(2)
                 .setDate(LocalDate.now().plusMonths(2))

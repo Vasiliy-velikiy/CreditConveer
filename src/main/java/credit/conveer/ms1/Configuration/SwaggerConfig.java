@@ -15,7 +15,7 @@ public class SwaggerConfig {
    public Docket api(){
         Docket docket=new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("credit.conveer.ms1.Controller"))
+                .apis(RequestHandlerSelectors.basePackage("credit.conveer"))
                 .paths(PathSelectors.any())
                 .build();
     return docket;

@@ -1,5 +1,7 @@
 package credit.conveer.ms1.Dto;
 
+import credit.conveer.msDeal.Model.Enum.Gender;
+import credit.conveer.msDeal.Model.Enum.MaritalStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -27,7 +29,7 @@ public class ScoringDataDTO {
     String middleName;
 
     @Schema(description = "gender")
-    Enum gender;
+    Gender gender;
 
     @Schema(description = "birthdate")
     LocalDate birthdate;
@@ -45,7 +47,7 @@ public class ScoringDataDTO {
     String passportIssueBranch;
 
     @Schema(description = "maritalStatus")
-    Enum maritalStatus;
+    MaritalStatus maritalStatus;
 
     @Schema(description = "dependentAmount")
     Integer dependentAmount;

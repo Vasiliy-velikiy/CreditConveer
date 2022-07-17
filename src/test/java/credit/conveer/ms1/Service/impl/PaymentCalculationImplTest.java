@@ -3,6 +3,11 @@ package credit.conveer.ms1.Service.impl;
 import credit.conveer.ms1.Dto.EmploymentDTO;
 import credit.conveer.ms1.Dto.ScoringDataDTO;
 import credit.conveer.ms1.Service.PaymentCalculation;
+import credit.conveer.msDeal.Model.Enum.EmploymentStatus;
+import credit.conveer.msDeal.Model.Enum.Gender;
+import credit.conveer.msDeal.Model.Enum.MaritalStatus;
+import credit.conveer.msDeal.Model.Enum.Position;
+import net.minidev.json.JSONUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +39,14 @@ class PaymentCalculationImplTest {
     }
 
     private enum gender {
-        MAN;
+        MALE;
     }
 
     private EmploymentDTO employmentDTO = new EmploymentDTO()
-            .setEmploymentStatus(employmentStatus.SELF_EMPLOYED)
+            .setEmploymentStatus(EmploymentStatus.SELF_EMPLOYED)
             .setEmployerINN("324245")
             .setSalary(new BigDecimal("400000"))
-            .setPosition(position.TOP_MANAGER)
+            .setPosition(Position.TOP_MANAGER)
             .setWorkExperienceTotal(19)
             .setWorkExperienceCurrent(14);
 
@@ -52,11 +57,11 @@ class PaymentCalculationImplTest {
             .setFirstName("Ivan")
             .setLastName("Ivanov")
             .setMiddleName("Ivanovich")
-            .setGender(gender.MAN)
+            .setGender(Gender.MALE)
             .setBirthdate(LocalDate.of(1993, 02, 03))
             .setPassportIssueDate(LocalDate.of(2005, 3, 13))
             .setPassportIssueBranch("УФМС России по Воронежской обл. центрального р-а")
-            .setMaritalStatus(maritalStatus.MARRIED)
+            .setMaritalStatus(MaritalStatus.MARRIED)
             .setDependentAmount(3)
             .setEmployment(employmentDTO)
             .setAccount("account")
@@ -70,19 +75,21 @@ class PaymentCalculationImplTest {
             .setFirstName("Alexander")
             .setLastName("Ivanov")
             .setMiddleName("Ivanov")
-            .setGender(gender.MAN)
+            .setGender(Gender.MALE)
             .setBirthdate(LocalDate.of(1992, 03, 03))
             .setPassportIssueDate(LocalDate.of(2005, 3, 13))
             .setPassportIssueBranch("УФМС России по Воронежской обл. центрального р-а")
-            .setMaritalStatus(maritalStatus.MARRIED)
+            .setMaritalStatus(MaritalStatus.MARRIED)
             .setDependentAmount(2)
             .setEmployment(employmentDTO)
             .setAccount("account")
             .setIsInsuranceEnabled(false)
             .setIsSalaryClient(true);
 
+
     @Test
     void getMonthlyPaymentWithoutInsurance() {
+        System.out.println(scoringDataDTOWithoutInsurance);
         BigDecimal result = paymentCalculation.getMonthlyPayment(scoringDataDTOWithoutInsurance);
         BigDecimal expected = new BigDecimal("8562.5813");
         assertEquals(expected,result);

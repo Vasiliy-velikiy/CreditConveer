@@ -77,47 +77,37 @@ public class PrescoringOffersImpl implements PrescoringOffers {
             rate = new BigDecimal("0.8");
         }
 
-        result.add(new LoanOfferDTO()
-                .setApplicationId(id++)
-                .setRequestedAmount(loanDTO.getAmount())
-                .setTotalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), this.rate, loanDTO.getTerm(), false))
-                .setTerm(loanDTO.getTerm())
-                .setMonthlyPayment(getMonthlyPayment(loanDTO.getAmount(), this.rate, loanDTO.getTerm(), false))
-                .setRate(this.rate)
-                .setIsInsuranceEnabled(false)
-                .setIsSalaryClient(false));
-
-        result.add(new LoanOfferDTO()
-                .setApplicationId(id++)
-                .setRequestedAmount(loanDTO.getAmount())
-                .setTotalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), rate, loanDTO.getTerm(), true)
+        LoanOfferDTO one=LoanOfferDTO.builder().applicationId(id++).requestedAmount(loanDTO.getAmount())
+                .totalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), this.rate, loanDTO.getTerm(), false)
                         .add(getInsurance(loanDTO.getAmount())))
-                .setTerm(loanDTO.getTerm())
-                .setMonthlyPayment(getMonthlyPayment(loanDTO.getAmount(), rate, loanDTO.getTerm(), true))
-                .setRate(this.rate)
-                .setIsInsuranceEnabled(true)
-                .setIsSalaryClient(false));
+                .term(loanDTO.getTerm()).monthlyPayment(getMonthlyPayment(loanDTO.getAmount(), this.rate, loanDTO.getTerm(), false))
+                .rate(this.rate)
+                .isInsuranceEnabled(false).isSalaryClient(false).build();
 
-        result.add(new LoanOfferDTO()
-                .setApplicationId(id++)
-                .setRequestedAmount(loanDTO.getAmount())
-                .setTotalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), rate, loanDTO.getTerm(), true)
+        LoanOfferDTO two=LoanOfferDTO.builder().applicationId(id++).requestedAmount(loanDTO.getAmount())
+                .totalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), rate, loanDTO.getTerm(), true)
                         .add(getInsurance(loanDTO.getAmount())))
-                .setTerm(loanDTO.getTerm())
-                .setMonthlyPayment(getMonthlyPayment(loanDTO.getAmount(), rate, loanDTO.getTerm(), true))
-                .setRate(rate)
-                .setIsInsuranceEnabled(true)
-                .setIsSalaryClient(true));
+                .term(loanDTO.getTerm()).monthlyPayment(getMonthlyPayment(loanDTO.getAmount(), rate, loanDTO.getTerm(), true))
+                .rate(this.rate)
+                .isInsuranceEnabled(true).isSalaryClient(false).build();
 
-        result.add(new LoanOfferDTO()
-                .setApplicationId(id++)
-                .setRequestedAmount(loanDTO.getAmount())
-                .setTotalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), this.rate, loanDTO.getTerm(), false))
-                .setTerm(loanDTO.getTerm())
-                .setMonthlyPayment(getMonthlyPayment(loanDTO.getAmount(), this.rate, loanDTO.getTerm(), false))
-                .setRate(rate)
-                .setIsInsuranceEnabled(false)
-                .setIsSalaryClient(true));
+        LoanOfferDTO three=LoanOfferDTO.builder().applicationId(id++).requestedAmount(loanDTO.getAmount())
+                .totalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), rate, loanDTO.getTerm(), true)
+                        .add(getInsurance(loanDTO.getAmount())))
+                .term(loanDTO.getTerm()).monthlyPayment(getMonthlyPayment(loanDTO.getAmount(), rate, loanDTO.getTerm(), true))
+                .rate(rate)
+                .isInsuranceEnabled(true).isSalaryClient(true).build();
+
+        LoanOfferDTO four=LoanOfferDTO.builder().applicationId(id++).requestedAmount(loanDTO.getAmount())
+                .totalAmount(getTotalAmount(loanDTO.getAmount().setScale(4, RoundingMode.HALF_EVEN), this.rate, loanDTO.getTerm(), false)
+                        .add(getInsurance(loanDTO.getAmount())))
+                .term(loanDTO.getTerm()).monthlyPayment(getMonthlyPayment(loanDTO.getAmount(), rate, loanDTO.getTerm(), false))
+                .rate(this.rate)
+                .isInsuranceEnabled(false).isSalaryClient(true).build();
+        result.add(one);
+        result.add(two);
+        result.add(three);
+        result.add(four);
 
         result.sort(Comparator.comparing(LoanOfferDTO::getRate).reversed());
 

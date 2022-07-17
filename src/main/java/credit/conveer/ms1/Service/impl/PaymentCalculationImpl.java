@@ -89,17 +89,26 @@ https://www.raiffeisen.ru/wiki/kak-rasschitat-annuitetnyj-platezh/
             case "SELF_EMPLOYED":
                 rate = rate.add(BigDecimal.valueOf(0.01));
                 break;
-            case "BISNESS_OWNER":
+            case "BUSINESS_OWNER":
                 rate = rate.add(BigDecimal.valueOf(0.03));
+                break;
+            case "EMPLOYED":
+                rate=rate.add(BigDecimal.valueOf(0.02));
                 break;
         }
         // проверка по позиции на работе
         switch (scoringDataDTO.getEmployment().getPosition().name()) {
-            case "MIDDLE_MANAGER" :
+            case "MID_MANAGER" :
                 rate = rate.subtract(BigDecimal.valueOf(0.02));
                 break;
             case "TOP_MANAGER":
                 rate = rate.subtract(BigDecimal.valueOf(0.04));
+                break;
+            case "WORKER"  :
+                rate=rate.subtract(BigDecimal.valueOf(0.03));
+                break;
+            case "OWNER":
+                rate = rate.subtract(BigDecimal.valueOf(0.05));
                 break;
             // проверка
         }
@@ -115,6 +124,13 @@ https://www.raiffeisen.ru/wiki/kak-rasschitat-annuitetnyj-platezh/
             case "DIVORCED":
                 rate = rate.add(BigDecimal.valueOf(0.01));
                 break;
+            case "SINGLE":
+                rate = rate.add(BigDecimal.valueOf(0.02));
+                break;
+            case "WIDOW_WIDOWER":
+                rate = rate.add(BigDecimal.valueOf(0.04));
+                break;
+
         }
         // проверка по кол-ву иждевенцев
         if (scoringDataDTO.getDependentAmount() > 1) {

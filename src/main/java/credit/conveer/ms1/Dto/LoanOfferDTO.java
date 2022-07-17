@@ -1,6 +1,7 @@
 package credit.conveer.ms1.Dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 /**дто на кредитные предложение */
 @Data
 @Accessors(chain = true)
+@Builder
 @Schema(name = "LoanOfferDTO ", description = "dto on loan offer")
 public class LoanOfferDTO {
     @Schema(description = "applicationId")

@@ -26,19 +26,10 @@ class PrescoringOffersImplTest {
 
     @Autowired
     private  PrescoringOffers prescoringOffers;
-
-
-  private   LoanApplicationRequestDTO loanDto=new LoanApplicationRequestDTO()
-          .setAmount(new BigDecimal("100000"))
-          .setBirthdate(LocalDate.of(1993, 02, 03))
-          .setEmail("test@mail.ru")
-          .setFirstName("Ivan")
-          .setLastName("Ivanov")
-          .setMiddleName("Ivanivich")
-          .setPassportNumber("123456")
-          .setPassportSeries("1234")
-          .setTerm(12);
-
+    private   LoanApplicationRequestDTO loanDto= LoanApplicationRequestDTO.builder().
+            amount(new BigDecimal("100000")).birthdate(LocalDate.of(1993, 02, 03))
+            .email("test@mail.ru").firstName("Ivan").lastName("Ivanov").middleName("Ivanivich").passportNumber("123456")
+            .passportSeries("1234").term(12).build();
 
     @Test
     void getMonthlyPayment() {
@@ -56,53 +47,37 @@ class PrescoringOffersImplTest {
 
     @Test
     void getTotalAmount() {
-       BigDecimal resul=  prescoringOffers.getTotalAmount(loanDto.getAmount(), BigDecimal.valueOf(0.10),loanDto.getTerm(),false);
+       BigDecimal result=  prescoringOffers.getTotalAmount(loanDto.getAmount(), BigDecimal.valueOf(0.10),loanDto.getTerm(),false);
+        System.out.println(result);
         BigDecimal expected= BigDecimal.valueOf(105476.7420).setScale(4, RoundingMode.HALF_EVEN);
-        assertEquals(expected,resul);
+        assertEquals(expected,result);
     }
 
     @Test
     void getPrescoringOffers() {
         List<LoanOfferDTO> expected = new ArrayList<>();
-        LoanOfferDTO loanOfferDTOOne=new LoanOfferDTO()
-                .setApplicationId(Long.valueOf(0))
-                .setRequestedAmount(BigDecimal.valueOf(100000))
-                .setTotalAmount(new BigDecimal(105476.7420).setScale(4, RoundingMode.HALF_EVEN))
-                .setTerm(12)
-                .setMonthlyPayment(new BigDecimal(8789.7285).setScale(4, RoundingMode.HALF_EVEN))
-                .setRate(BigDecimal.valueOf(0.10))
-                .setIsInsuranceEnabled(false)
-                .setIsSalaryClient(false);
 
-        LoanOfferDTO loanOfferDTOTwo=new LoanOfferDTO()
-                .setApplicationId(Long.valueOf(1))
-                .setRequestedAmount(BigDecimal.valueOf(100000))
-                .setTotalAmount(new BigDecimal(126024.4156).setScale(4, RoundingMode.HALF_EVEN))
-                .setTerm(12)
-                .setMonthlyPayment(new BigDecimal(9668.7013).setScale(4, RoundingMode.HALF_EVEN))
-                .setRate(BigDecimal.valueOf(0.10))
-                .setIsInsuranceEnabled(true)
-                .setIsSalaryClient(false);
+        LoanOfferDTO loanOfferDTOOne=LoanOfferDTO.builder().applicationId(Long.valueOf(0)).requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(new BigDecimal(115476.7420).setScale(4, RoundingMode.HALF_EVEN)).term(12).monthlyPayment(new BigDecimal(8789.7285).setScale(4, RoundingMode.HALF_EVEN))
+                .rate(BigDecimal.valueOf(0.10)).isInsuranceEnabled(false).isSalaryClient(false).build();
 
-        LoanOfferDTO loanOfferDTOThree=new LoanOfferDTO()
-                .setApplicationId(Long.valueOf(2))
-                .setRequestedAmount(BigDecimal.valueOf(100000))
-                .setTotalAmount(new BigDecimal(126024.4156).setScale(4, RoundingMode.HALF_EVEN))
-                .setTerm(12)
-                .setMonthlyPayment(new BigDecimal(9668.7013).setScale(4, RoundingMode.HALF_EVEN))
-                .setRate(BigDecimal.valueOf(0.10))
-                .setIsInsuranceEnabled(true)
-                .setIsSalaryClient(true);
+        LoanOfferDTO loanOfferDTOTwo=LoanOfferDTO.builder().applicationId(Long.valueOf(1)).requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(new BigDecimal(126024.4156).setScale(4, RoundingMode.HALF_EVEN)).term(12)
+                .monthlyPayment(new BigDecimal(9668.7013).setScale(4, RoundingMode.HALF_EVEN))
+                .rate(BigDecimal.valueOf(0.10)).isInsuranceEnabled(true).isSalaryClient(false).build();
 
-        LoanOfferDTO loanOfferDTOFour=new LoanOfferDTO()
-                .setApplicationId(Long.valueOf(3))
-                .setRequestedAmount(BigDecimal.valueOf(100000))
-                .setTotalAmount(new BigDecimal(105476.7420).setScale(4, RoundingMode.HALF_EVEN))
-                .setTerm(12)
-                .setMonthlyPayment(new BigDecimal(8789.7285).setScale(4, RoundingMode.HALF_EVEN))
-                .setRate(BigDecimal.valueOf(0.10))
-                .setIsInsuranceEnabled(false)
-                .setIsSalaryClient(true);
+        LoanOfferDTO loanOfferDTOThree=LoanOfferDTO.builder().applicationId(Long.valueOf(2)).requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(new BigDecimal(126024.4156).setScale(4, RoundingMode.HALF_EVEN)).term(12)
+                .monthlyPayment(new BigDecimal(9668.7013).setScale(4, RoundingMode.HALF_EVEN))
+                .rate(BigDecimal.valueOf(0.10)).isInsuranceEnabled(true).isSalaryClient(true).build();
+
+
+        LoanOfferDTO loanOfferDTOFour=LoanOfferDTO.builder().applicationId(Long.valueOf(3)).requestedAmount(BigDecimal.valueOf(100000))
+                .totalAmount(new BigDecimal(115476.7420).setScale(4, RoundingMode.HALF_EVEN)).term(12)
+                .monthlyPayment(new BigDecimal(8789.7285).setScale(4, RoundingMode.HALF_EVEN))
+                .rate(BigDecimal.valueOf(0.10)).isInsuranceEnabled(false).isSalaryClient(true).build();
+
+
                 expected.add(loanOfferDTOOne);
                 expected.add(loanOfferDTOTwo);
                 expected.add(loanOfferDTOThree);
