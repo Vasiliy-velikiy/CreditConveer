@@ -37,7 +37,7 @@ class DealServiceImplTest {
 
 
     private Application application = new Application().setId(Long.valueOf(1)).setClientApp(mockClient).setCredit(mockCredit).setStatus(Status.APPROVED)
-            .setCreation_date(LocalDate.of(2022, 07, 17))
+            .setCreation_date(LocalDate.now())
             .setAppliedOffer(mockLoanOffer).setSign_date(null).setSes_code(null).setStatus_history(null);
 
     @Test

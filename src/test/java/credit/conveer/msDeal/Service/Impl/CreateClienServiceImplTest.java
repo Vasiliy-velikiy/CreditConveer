@@ -36,8 +36,8 @@ class CreateClienServiceImplTest {
             .setLast_name("Moskalev")
             .setMiddle_name("Anatolich")
             .setBirth_date(LocalDate.of(1993, 10, 13))
-            .setPassport("1111")
-            .setSeries("111111")
+            .setPassport("111111")
+            .setSeries("1111")
             .setEmail("String@mail.ru")
             .setApplications(new ArrayList<>());
 

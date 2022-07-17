@@ -10,7 +10,9 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.EnumType.STRING;
 
 /**
@@ -32,7 +34,7 @@ public class Credit {
     private BigDecimal rate;     // (Процентная ставка)
     private BigDecimal psk;     // (Полная стоимость кредита)
 
-    //private PaymentScheduleElement payment_schedule; // (График платежей
+
 
     // Доп. услуги
     private Boolean is_insurance_enabled;  //(Страховка включена?)
@@ -46,5 +48,11 @@ public class Credit {
     @Column(name = "status")
     @Enumerated(STRING)
     private CreditStatus credit_status;          // Статус кредита CALCULATED ISSUED
+
+    @OneToMany(mappedBy = "creditShed",
+            orphanRemoval = true,
+            fetch = FetchType.LAZY,
+            cascade = {PERSIST})
+    private List <PaymentScheduleElementModel> payment_schedule; // (График платежей
 
 }

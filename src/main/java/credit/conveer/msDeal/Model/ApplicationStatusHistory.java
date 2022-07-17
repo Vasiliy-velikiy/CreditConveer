@@ -36,7 +36,7 @@ public class ApplicationStatusHistory {
     @Enumerated(STRING)
     ChangeType changeType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {PERSIST})
     @JoinColumn(name = "application_id")
     Application application;
 }
