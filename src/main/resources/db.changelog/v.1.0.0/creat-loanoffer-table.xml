@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="creat-loanoffer-table" author="Moskalev">
+        <createTable tableName="loan_offer">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="isInsuranceEnabled" type="boolean"/>
+            <column name="isSalaryClient" type="boolean"/>
+            <column name="monthlyPayment" type="int"/>
+            <column name="rate" type="int"/>
+            <column name="requestedAmount" type="int"/>
+            <column name="totalAmount" type="int"/>
+            <column name=" term" type="int"/>
+            <column name="application_id" type="int">
+                <constraints foreignKeyName="loanoffer_app_id_app_id" references="application(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

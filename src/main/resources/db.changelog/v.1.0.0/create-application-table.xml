@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="creat-application-table" author="Moskalev">
+        <createTable tableName="application">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="ses_code" type="varchar(64)"/>
+            <column name="sign_date" type="date"/>
+            <column name="status" type="varchar(64)"/>
+            <column name="client_id" type="int">
+              <constraints foreignKeyName="application_client_id_client_id" references="client(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
