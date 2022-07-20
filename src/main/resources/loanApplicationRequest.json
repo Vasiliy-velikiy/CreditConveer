@@ -1,0 +1,11 @@
+{
+  "amount": "100000",
+  "term": "12",
+  "firstName": "Vasiliy",
+  "lastName": "Moskalev",
+  "middleName": "Anatolich",
+  "email": "String@mail.ru",
+  "birthdate": "1995-10-13",
+  "passportSeries": "111111",
+  "passportNumber": "1111"
+}
